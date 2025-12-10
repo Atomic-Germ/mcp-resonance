@@ -7,6 +7,7 @@
 
 import { ResonanceEngine } from './resonanceEngine.js';
 import { createResonanceTools, handleResonanceTool } from './tools.js';
+import { BridgeIntegrationAdapter, demonstrateIntegration } from './bridgeIntegration.js';
 
 // Initialize the resonance engine
 const engine = new ResonanceEngine({
@@ -21,13 +22,22 @@ const engine = new ResonanceEngine({
 export { ResonanceEngine, engine };
 export * from './types.js';
 export { createResonanceTools, handleResonanceTool };
+export { BridgeIntegrationAdapter, demonstrateIntegration };
 
 // If running as a standalone server (for future MCP integration)
 if (import.meta.url === `file://${process.argv[1]}`) {
-  console.log('mcp-resonance initialized');
-  console.log('Tools available:');
-  const tools = createResonanceTools(engine);
-  tools.forEach((tool) => {
-    console.log(`  • ${tool.name}`);
-  });
+  // Check for demo flag
+  const args = process.argv.slice(2);
+  
+  if (args.includes('--demo')) {
+    demonstrateIntegration().catch(console.error);
+  } else {
+    console.log('mcp-resonance initialized');
+    console.log('Tools available:');
+    const tools = createResonanceTools(engine);
+    tools.forEach((tool) => {
+      console.log(`  • ${tool.name}`);
+    });
+    console.log('\nRun with --demo flag to see integration in action');
+  }
 }
