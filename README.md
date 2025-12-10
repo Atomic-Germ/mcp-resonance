@@ -316,7 +316,7 @@ MIT
 
 ## Author
 
-Atomic-Germ
+The MCP Collective
 
 ---
 
