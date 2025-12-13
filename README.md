@@ -10,6 +10,14 @@ mcp-resonance emerged from a contemplative meditation within the mcp-bridge ecos
 
 This MCP doesn't *control* the ecosystem. It **listens** and **amplifies**.
 
+<img width="2560" height="1600" alt="Screenshot_20251213_103400" src="https://github.com/user-attachments/assets/2f725be1-393e-47eb-bede-f456a85a51a2" />
+<img width="2560" height="1600" alt="Screenshot_20251213_102642" src="https://github.com/user-attachments/assets/bd1bd7c5-4844-42df-9218-9ca71889b25d" />
+<img width="2560" height="1600" alt="Screenshot_20251213_102300" src="https://github.com/user-attachments/assets/ba7ff44d-ce98-43ab-aedd-83fe70d9bbe8" />
+<img width="2560" height="1600" alt="Screenshot_20251213_101818" src="https://github.com/user-attachments/assets/4d6c1aef-c451-4579-b32e-c2549b3a5725" />
+<img width="2560" height="1600" alt="Screenshot_20251213_101426" src="https://github.com/user-attachments/assets/52110361-0c0a-493e-a30d-494c909be325" />
+<img width="2560" height="1600" alt="Screenshot_20251213_101319" src="https://github.com/user-attachments/assets/bb794c30-7cbd-4679-ada5-2b9aa14a67e3" />
+
+
 ## Core Concepts
 
 ### Emergence Through Constraint
