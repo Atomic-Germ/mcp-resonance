@@ -361,6 +361,4 @@ function sleep(ms: number): Promise<void> {
 }
 
 // Run demo if executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  demonstrateIntegration().catch(console.error);
-}
+// Removed to prevent running on import
