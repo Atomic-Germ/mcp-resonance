@@ -1,0 +1,12 @@
+[project]
+name = "fast-resonance"
+version = "0.1.0"
+description = "MCP Resonance - Harmonic Observer for AI ecosystems"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastmcp>=2.14.1",
+]
+
+[project.scripts]
+fast-resonance = "main:main"
