@@ -73,7 +73,12 @@ export class ResonanceEngine {
     // Create patterns for concepts that appear frequently
     for (const [concept, moments] of conceptFrequency.entries()) {
       if (moments.length >= this.config.patternMinFrequency) {
-        const patternId = `pattern-${concept}-${Date.now()}`;
+        // Stable id per concept so the pattern strengthens over time
+        const patternId = `pattern-${concept}`;
+        const strength = Math.min(
+          1,
+          moments.length / (this.config.patternMinFrequency + 1)
+        );
 
         if (!this.patterns.has(patternId)) {
           const pattern: DetectedPattern = {
@@ -82,7 +87,7 @@ export class ResonanceEngine {
             concepts: [concept],
             occurrences: moments,
             frequency: moments.length,
-            strength: Math.min(1, moments.length / 10),
+            strength,
             emergenceTime: moments[0]?.timestamp ?? Date.now(),
             relatedPatterns: [],
           };
@@ -92,7 +97,7 @@ export class ResonanceEngine {
           const existing = this.patterns.get(patternId)!;
           existing.occurrences = moments;
           existing.frequency = moments.length;
-          existing.strength = Math.min(1, moments.length / 10);
+          existing.strength = strength;
         }
       }
     }

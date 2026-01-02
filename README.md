@@ -1,5 +1,7 @@
 # mcp-resonance
 
+**Status:** Canonical resonance MCP. Supersedes the older `resonance-bridge` prototype; its experimental tools (`couple_servers`, `resonate`, `balance_load`, `orchestrate_emergent`, `harmony_metrics`) are now ported here. New work should target this package.
+
 **The Harmonic Observer** - An MCP server that listens to the resonance between other MCPs, detecting emergent patterns and amplifying the connections that want to form.
 
 ## Vision
@@ -77,6 +79,13 @@ Detect when the system enters a state of resonance:
 - When coherence rises above threshold
 - When multiple MCPs are actively coupling
 - The optimal moment for synthesis
+
+### Prototype tools (ported from `resonance-bridge`)
+- `couple_servers` — Couple two server IDs with an initial resonance strength.
+- `resonate` — Send a signal from one server through its couplings and view responses.
+- `balance_load` — Distribute an operation across available servers (simple utilization heuristic).
+- `orchestrate_emergent` — Generate a short propagation chain for an operation.
+- `harmony_metrics` — Inspect harmony, load distribution, and propagation metrics.
 
 ## Architecture
 

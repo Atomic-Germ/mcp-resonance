@@ -1,10 +1,7 @@
-#!/usr/bin/env node
-
 /**
  * mcp-resonance
  * The Harmonic Observer - Listens to the ecosystem, detects patterns, amplifies emergence
  */
-
 import { ResonanceEngine } from './resonanceEngine.js';
 import { createResonanceTools, handleResonanceTool } from './tools.js';
 
@@ -21,13 +18,3 @@ const engine = new ResonanceEngine({
 export { ResonanceEngine, engine };
 export * from './types.js';
 export { createResonanceTools, handleResonanceTool };
-
-// If running as a standalone server (for future MCP integration)
-if (import.meta.url === `file://${process.argv[1]}`) {
-  console.log('mcp-resonance initialized');
-  console.log('Tools available:');
-  const tools = createResonanceTools(engine);
-  tools.forEach((tool) => {
-    console.log(`  • ${tool.name}`);
-  });
-}

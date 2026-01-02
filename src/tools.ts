@@ -4,6 +4,12 @@
  */
 
 import { ResonanceEngine } from './resonanceEngine.js';
+import {
+  AdaptiveLoadBalancer,
+  EmergentOrchestrator,
+  ResonantCouplingNetwork,
+  type ResonanceSignal,
+} from './prototypeSystems.js';
 import type { EcosystemMoment } from './types.js';
 
 export interface Tool {
@@ -21,6 +27,11 @@ export interface TextContent {
   type: 'text';
   text: string;
 }
+
+// Singletons so prototype subsystems maintain continuity across tool calls
+const couplingNetwork = new ResonantCouplingNetwork();
+const loadBalancer = new AdaptiveLoadBalancer();
+const orchestrator = new EmergentOrchestrator();
 
 export function createResonanceTools(engine: ResonanceEngine): Tool[] {
   return [
@@ -128,6 +139,82 @@ export function createResonanceTools(engine: ResonanceEngine): Tool[] {
       name: 'reset_observations',
       description:
         'Clear all observations and patterns (useful for starting a new session)',
+      inputSchema: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    },
+    {
+      name: 'couple_servers',
+      description:
+        'Prototype: Couple two MCP servers with an initial resonance strength (ports resonance-bridge)',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          serverA: { type: 'string', description: 'First server ID' },
+          serverB: { type: 'string', description: 'Second server ID' },
+          resonance: {
+            type: 'number',
+            description: 'Initial resonance strength (0-1)',
+          },
+        },
+        required: ['serverA', 'serverB'],
+      },
+    },
+    {
+      name: 'resonate',
+      description:
+        'Prototype: Trigger resonant response from a server across its couplings (ports resonance-bridge)',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          serverId: { type: 'string', description: 'Server to resonate from' },
+          signal: {
+            type: 'object',
+            description: 'Arbitrary signal payload to resonate with',
+          },
+        },
+        required: ['serverId', 'signal'],
+      },
+    },
+    {
+      name: 'balance_load',
+      description:
+        'Prototype: Distribute an operation across available servers (ports resonance-bridge)',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          operation: { type: 'string', description: 'Operation name' },
+          servers: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Available server IDs',
+          },
+        },
+        required: ['operation', 'servers'],
+      },
+    },
+    {
+      name: 'orchestrate_emergent',
+      description:
+        'Prototype: Create an emergent orchestration chain for an operation (ports resonance-bridge)',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          operation: { type: 'string', description: 'Operation to orchestrate' },
+          context: {
+            type: 'object',
+            description: 'Optional context payload',
+          },
+        },
+        required: ['operation'],
+      },
+    },
+    {
+      name: 'harmony_metrics',
+      description:
+        'Prototype: Inspect harmony, load distribution, and propagation metrics (ports resonance-bridge)',
       inputSchema: {
         type: 'object',
         properties: {},
@@ -256,6 +343,90 @@ export async function handleResonanceTool(
       return {
         type: 'text',
         text: 'All observations and patterns cleared. Ready for a new session.',
+      };
+    }
+
+    case 'couple_servers': {
+      const resonance = (args.resonance as number | undefined) ?? 0.5;
+      couplingNetwork.coupleServers(args.serverA as string, args.serverB as string, resonance);
+      return {
+        type: 'text',
+        text: `Coupled ${(args.serverA as string)} and ${(args.serverB as string)} with resonance ${resonance.toFixed(2)}`,
+      };
+    }
+
+    case 'resonate': {
+      const serverId = args.serverId as string;
+      const signal = (args.signal as ResonanceSignal) ?? {};
+      const responses = couplingNetwork.resonate(serverId, signal);
+      const responseText = Array.from(responses.entries())
+        .map(([server, resonance]) => `${server}: ${resonance.toFixed(2)}`)
+        .join(', ');
+
+      return {
+        type: 'text',
+        text: responseText.length
+          ? `Resonant responses: ${responseText}`
+          : `No couplings found for ${serverId}`,
+      };
+    }
+
+    case 'balance_load': {
+      const servers = (args.servers as string[]) ?? [];
+      servers.forEach((srv) => loadBalancer.registerServer(srv));
+      const assigned = loadBalancer.distributeLoad(args.operation as string, servers);
+
+      if (assigned) {
+        setTimeout(() => loadBalancer.completeOperation(assigned), 100);
+      }
+
+      return {
+        type: 'text',
+        text: `Operation "${args.operation as string}" assigned to: ${assigned ?? 'none available'}`,
+      };
+    }
+
+    case 'orchestrate_emergent': {
+      const steps = orchestrator.orchestrate(
+        args.operation as string,
+        (args.context as Record<string, unknown> | undefined) ?? {}
+      );
+
+      const rendered = steps
+        .map((step) => `Step ${step.step}: ${step.consequence} (amp: ${step.amplification.toFixed(2)})`)
+        .join('\n');
+
+      return {
+        type: 'text',
+        text: `Emergent orchestration:\n${rendered}`,
+      };
+    }
+
+    case 'harmony_metrics': {
+      const metrics = couplingNetwork.getHarmonyMetrics();
+      const loadDist = loadBalancer.getLoadDistribution();
+      const propagation = orchestrator.getPropagationMetrics();
+
+      const sections = [
+        'Harmony Metrics:',
+        ...Array.from(metrics.entries()).map(
+          ([server, harmony]) => `  ${server}: ${(harmony * 100).toFixed(1)}%`
+        ),
+        '',
+        'Load Distribution:',
+        ...Array.from(loadDist.entries()).map(
+          ([server, load]) => `  ${server}: ${(load * 100).toFixed(1)}%`
+        ),
+        '',
+        'Propagation Chains:',
+        ...Array.from(propagation.entries()).map(
+          ([op, length]) => `  ${op}: ${length} steps`
+        ),
+      ];
+
+      return {
+        type: 'text',
+        text: sections.join('\n'),
       };
     }
 
